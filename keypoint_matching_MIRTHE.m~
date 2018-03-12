@@ -1,0 +1,23 @@
+function [keypoints1, keypoints2, matches, scores] = keypoint_matching_MIRTHE(image1, image2)
+
+ image1 = imread(image1);
+ image2 = imread(image2);
+ I1 = single(image1);
+ I2 = single(image2);
+ 
+ [keypoints1, descriptors1] = vl_sift(I1) ;
+ [keypoints2, descriptors2] = vl_sift(I2) ;
+ [matches, scores] = vl_ubcmatch(descriptors1, descriptors2) ;
+ 
+ % create image
+ imshow([image1, image2]);
+ keypoints2(1, :) = keypoints2(1, :) + size(image1,2); % change y-coordinates of keypoint image2
+ perm = randperm(size(matches,2));
+ sel = perm(1:50);
+ vl_plotframe(keypoints1(:, matches(1, sel)));
+ vl_plotframe(keypoints2(:, matches(2, sel)));
+ hold on
+ l = line([ keypoints1(1, matches(1, sel)); keypoints2(1, matches(2, sel))], [ keypoints1(2, matches(1, sel)); keypoints2(2, matches(2, sel))]);
+ set(l,'linewidth', 1, 'color', 'y') ;
+
+end

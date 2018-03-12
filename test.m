@@ -1,0 +1,1 @@
+keypoint_matching_MIRTHE('boat1.pgm', 'boat2.pgm');
