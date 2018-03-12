@@ -22,7 +22,7 @@ scores  = scores(perm) ;
 
 figure(1) ; clf ;
 imshow(cat(2, Ia, Ib)) ;
-
+axis image off ;
 
 x1 = f1(1,matches(1,1:N)) ;
 x2 = f2(1,matches(2,1:N)) + size(image1,2) ;
@@ -31,11 +31,11 @@ y2 = f2(2,matches(2,1:N)) ;
 
 
 h = line([x1 ; x2], [y1 ; y2]) ;
-set(h,'linewidth', 1, 'color', 'r') ;
+set(h,'linewidth', 1, 'color', 'b') ;
 
-vl_plotframe(f1(:,matches(1,1:N))) ;
+vl_plotframe(f1(:,matches(1,1:50))) ;
 f2(1,:) = f2(1,:) + size(image2,2) ;
-vl_plotframe(f2(:,matches(2,1:N))) ;
+vl_plotframe(f2(:,matches(2,1:50))) ;
 axis image off ;
 
 
