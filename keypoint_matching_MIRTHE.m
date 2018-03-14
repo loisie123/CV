@@ -1,4 +1,4 @@
-function [keypoints1, keypoints2, matches, scores] = keypoint_matching_MIRTHE(image1, image2)
+function [keypoints1, keypoints2, matches] = keypoint_matching_MIRTHE(image1, image2)
 
 
 
@@ -12,7 +12,11 @@ function [keypoints1, keypoints2, matches, scores] = keypoint_matching_MIRTHE(im
  % find keypoints and matches
  [keypoints1, descriptors1] = vl_sift(I1) ;
  [keypoints2, descriptors2] = vl_sift(I2) ;
- [matches, scores] = vl_ubcmatch(descriptors1, descriptors2) ;
+ [matches, ~] = vl_ubcmatch(descriptors1, descriptors2) ;
+ 
+%  % keypoint matchings
+%  keypoints1_matchings = keypoints1(:, matches(1,:));
+%  keypoints2_matchings = keypoints2(:, matches(2,:));
  
  % create image
  imshow([image1, image2]);
