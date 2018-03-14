@@ -1,0 +1,6 @@
+N = 1
+pairs = 3
+
+
+
+transformation = ransac_lois('boat1.pgm', 'boat2.pgm', N, pairs, T)
