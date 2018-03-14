@@ -27,17 +27,12 @@ for n =1:N
         A = [A; row1 ; row2]
         b = [b; x2 ;y2];   
     end
-     
+        
     trans = pinv(A) * b
-    
-    
-    % Construct A 
-    % Construct B
-    
     x_trans_list = [];
     y_trans_list = [];
    
-    
+    % plot image
     imshow(cat(2, imread(input_image1), imread(input_image2)));
     hold on
     
@@ -50,7 +45,6 @@ for n =1:N
         A = [x_old y_old 0 0 1 0 ; 0 0 x_old y_old 0 1];
         transjoe = A * trans;
         
-        
         x_trans = transjoe(1);
         y_trans = transjoe(2);
         x_trans_list = [x_trans_list , x_trans];
@@ -60,14 +54,11 @@ for n =1:N
         x_new = f2(1,matches(2,punt)) ;
         y_new = f2(2,matches(2,punt)) ;
         
-        
         dist =sqrt((y_trans-y_new)^2+(x_trans-x_new)^2);
         
         if dist < 10
-            count_inliers = count_inliers + 1;
-            
-        end
-        
+            count_inliers = count_inliers + 1;    
+        end   
     end
 
     x = f1(1,matches(1,points)) ;
@@ -92,14 +83,23 @@ for n =1:N
 end
 
 
+image = imread(input_image1);
+% transform image with our own function
+% geen idee hoe dit moet
 
 
 
 
+% with imtransform and transformation
+tform = zeros(3,3)
+tform(1:2,1:2) = reshape(transformation(1:4),2, 2)
+tform(3,3)= 1
 
+t = maketform('affine',tform);
+transformed = imtransform(image,t,'nearest');
 
-
-
-
+figure;
+imshow( transformed)
+title("Transformed image with the built-in function")
 
 end
