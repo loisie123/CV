@@ -1,8 +1,13 @@
 function [keypoints1, keypoints2, matches] = keypoint_matching_MIRTHE(image1, image2, draw_image)
 
     % read image
-    image1 = imread(image1);
-    image2 = imread(image2);
+    if size(imread(image1) ,3)==3
+        image1 = rgb2gray(imread(image1));
+        image2 = rgb2gray(imread(image2));
+    else
+        image1 = imread(image1);
+        image2 = imread(image2);
+    end
     I1 = single(image1);
     I2 = single(image2);
 

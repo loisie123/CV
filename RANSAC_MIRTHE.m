@@ -38,10 +38,11 @@ function [transformation] = RANSAC_MIRTHE( image1, image2 )
         end
     end
     
+    % find transformation operators
     M = [transformation(1:2)'; transformation(3:4)']; 
-    size(M)
     t = transformation(5:6);
     
+    % transform the image
     trans_image = zeros(size(image1));
     for x=1:size(image1, 1)
         for y=1:size(image1, 2)
@@ -52,12 +53,9 @@ function [transformation] = RANSAC_MIRTHE( image1, image2 )
         end
     end
     
-    
-    % transformed_image = imtransform(image1, transformation);
-    
-    
-    % nearest neightborhood interpolation is dat je afrond naar dichtstbij
-    % zijnde pixel
+    % missing is transform on matlab way
+    % vergelijking met verschillende transforms
+    % how many iterations?
 end
 
 
