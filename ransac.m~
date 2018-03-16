@@ -5,7 +5,7 @@ function [transformation] = ransac(input_image1, input_image2, N, pairs, T, disp
 % T : The amount of matches
 % P : pick P amount of matches from T 
 % display-image: whether or not some images must be displayed
-% output:
+%output:
 % transformation parameters
 
 
@@ -112,18 +112,18 @@ t
  for x=1:n
     for y=1:m 
         coordinates = round(M * [x;y] + t );
-        xnew = coordinates(1,1);
-        ynew = coordinates(2,1);
-        if xnew > 1 && xnew < n &&  ynew >1 && ynew < m
-            trans_image(xnew, ynew )= image(x, y);   
-            
+        xnew = coordinates(1,1)
+        ynew = coordinates(2,1)
+        if coordinates(1,1) > 1 && coordinates(2,1) > 1
+            if coordinates(1,1) <= n && coordinates(2,1) <= m
+                trans_image(coordinates(1,1), coordinates(2,1)) = image(x, y);   
+            end
         end
     end
  end
  
 if display_image ~= 'yes' 
-    imshow(mat2gray(trans_image))
-    
+    imshow(trans_image);
 end
 
 
