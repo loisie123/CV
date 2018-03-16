@@ -1,16 +1,18 @@
-function [transformation] = ransac_lois(input_image1, input_image2, N, pairs, T)
+function [transformation] = ransac_lois(input_image1, input_image2, N, pairs, T, show_between)
 % %fuction that follows the ransac algorithm 
 % Input_image1 and input image2: the images that are compared. 
 % N : The amount of times the ransac is done
 % T : The amount of matches
 % P : pick P amount of matches from T 
 
+disp(show_between)
 
-[points matches f1 f2 d1 d2] = keypoint_matching_lois(input_image1, input_image2, T);
+[points matches f1 f2 d1 d2] = keypoint_matching_lois(input_image1, input_image2, T, show_between);
 count = 0 
 
 for n =1:N
-    figure; 
+    
+    %figure; 
     count_inliers = 0 ;
     % choose P pairs fromt the matches.
     A = []
@@ -31,10 +33,14 @@ for n =1:N
     trans = pinv(A) * b
     x_trans_list = [];
     y_trans_list = [];
-   
-    % plot image
-    imshow(cat(2, imread(input_image1), imread(input_image2)));
-    hold on
+    
+    if show_between == 'joe'
+        figure;
+        imshow(cat(2, imread(input_image1), imread(input_image2)));
+        hold on
+    end
+        
+    
     
     % transform the matched points
     for punt = 1:length(points)
@@ -67,13 +73,14 @@ for n =1:N
     % to plot add the size of the image
     x_list = x_trans_list ;
     
-        % show the image nex to eahtother
-     h1 = line([x ; x_list], [y ; y_trans_list]) ;
-     set(h1,'linewidth', 1, 'color', 'r') ; 
-       
-     vl_plotframe(f1(:,matches(1,points))) ;
+     if show_between == 'joe'
+         h1 = line([x ; x_list], [y ; y_trans_list]) ;
+         set(h1,'linewidth', 1, 'color', 'r') ; 
+         vl_plotframe(f1(:,matches(1,points))) ;
+         plot(x_list, y_trans_list, 'b*', 'LineWidth', 2, 'MarkerSize', 15);
+     end
      
-     plot(x_list, y_trans_list, 'b*', 'LineWidth', 2, 'MarkerSize', 15);
+
     % if this count is best, save the transformation
     if count_inliers > count -1
         transformation = trans;
@@ -91,15 +98,17 @@ image = imread(input_image1);
 
 
 % with imtransform and transformation
-tform = zeros(3,3)
-tform(1:2,1:2) = reshape(transformation(1:4),2, 2)
-tform(3,3)= 1
+tform = zeros(3,3);
+tform(1:2,1:2) = reshape(transformation(1:4),2, 2);
+tform(3,3)= 1;
 
 t = maketform('affine',tform);
 transformed = imtransform(image,t,'nearest');
 
-figure;
-imshow( transformed)
-title("Transformed image with the built-in function")
+if show_between ~= 'joe'
+    disp("JOEEEEEEEEEE")
+    imshow( transformed);
+    title(['N = ' num2str(N) ' and p =  ' num2str(pairs) '. ' ]);
+end
 
 end
