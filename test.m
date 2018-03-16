@@ -4,6 +4,7 @@
 %% 
 RANSAC_MIRTHE( 'boat1.pgm', 'boat2.pgm');
 %%
+
 disp("begin")
 stitch('left.jpg', 'right.jpg', 100000, 4, 50);
 disp("klaar")

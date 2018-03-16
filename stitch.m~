@@ -1,44 +1,48 @@
-function [stitched_image] = stitch(left, right, N, T )
+function [stitched_image] = stitch(left, right, N, B, P)
 % %function that creates a stitched image
-% left, right: the images that are compared
-% N : The amount of times the ransac is done
-% T : The amount of matches
-% P : pick P amount of matches from T 
-% display-image: whether or not some images must be displayed
+% input:
+%   left, right: the images that are compared
+%   N : number of iterations for doing RANSAC
+%   B : size of batch for keypoint_matching
+%   P : size of matching pairs for doing RANSAC
 % output:
-% transformation parameters
+%   stiched_image
 
-    % ransac(right, left, 1000, 4, 50, 'nop')
-    [transformation] = ransac(right, left, 100000, 4, 50, 'nop');
+    % find affine transformation
+    [transformation] = ransac(right, left, N, B, P, 'nop');
     
     % find transformation operators
     M = [transformation(1:2)'; transformation(3:4)']; 
     t = transformation(5:6);
 
-    % read image
+    % read image and find the sizes
     right = rgb2gray(imread(right));
     left = rgb2gray(imread(left));
-    
     [hr, wr] = size(right);
     [hl, wl] = size(left);
     
+    % find corners of the stiched-images
     corners = zeros(2, 4);
-    
     corners(:,1) = round(M * [1;1] + t)';
     corners(:,2) = round(M * [1;wr] + t)';
     corners(:,3) = round(M * [hr;1] + t)';
     corners(:,4) = round(M * [hr;wr] + t)';
     
+    % find height of stitched image
     max_height = max([hl, max(corners(1,:))]);
     min_height = min([1, min(corners(1,:))]);
     height_stitch = max_height - (min_height - 1);
+    disp(height_stitc)
     
+    % find width of stitched image
     max_width = max([wl, max(corners(2,:))]);
     min_width = min([1, min(corners(2,:))]);
     width_stitch = max_width - (min_width - 1);
     
+    % create a (black) framework for the stiched image
     stitched_image = zeros(height_stitch, width_stitch);
     
+    % put all pixels of the left image at the stiched image
     for x=1:hl
         for y=1:wl
             x_prime = x - (min_height - 1);
@@ -47,6 +51,7 @@ function [stitched_image] = stitch(left, right, N, T )
         end
     end
     
+    % put all pixels of the transformed right image on the stitched image
     for x=1:hr
         for y=1:wr
             coordinates = round(M * [x; y] + t);
@@ -58,6 +63,7 @@ function [stitched_image] = stitch(left, right, N, T )
         end
     end
     
+    % show the stitched image
     figure;
     imshow(stitched_image, []);
     

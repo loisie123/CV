@@ -11,31 +11,33 @@ function [vector matches f1 f2] = keypoint_matching(input_1, input_2, B, draw_im
 %   f1: keypoints first image
 %   f2: keypoints second image
 
+    % read image
+    if size(imread(input_1) ,3)==3
+        image1 = single(rgb2gray(imread(input_1)));
+        image2 = single(rgb2gray(imread(input_2)));
+    else
+        image1 = single(imread(input_1));
+        image2 = single(imread(input_2));
+    end
 
     % read the images
-    Ib = imread(input_1) ;
-    Ia = imread(input_2) ;
+    Ia = imread(input_1) ;
+    Ib = imread(input_2) ;
     
     % make images same size
     % Get size of existing image A. 
-     [rowsA colsA numberOfColorChannelsA] = size(Ia); 
+     [rowsA colsA numberOfColorChannelsA] = size(Ia; 
     % Get size of existing image B. 
     [rowsB colsB numberOfColorChannelsB] = size(Ib); 
     % See if lateral sizes match. 
     if rowsB ~= rowsA || colsA ~= colsB 
     % Size of B does not match A, so resize B to match A's size. 
-    Ib = imresize(Ib, [rowsA colsA]); 
+    B = imresize(B, [rowsA colsA]); 
     end
     
     
-    % read image
-    if size(Ia ,3)==3
-        image1 = single(rgb2gray(Ia));
-        image2 = single(rgb2gray(Ib));
-    else
-        image1 = single(imread(input_1));
-        image2 = single(imread(input_2));
-    end
+    
+    
 
     % find keypoints and matches
     [f1,d1] = vl_sift(image1) ;

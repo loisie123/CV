@@ -32,11 +32,13 @@ function [stitched_image] = stitch(left, right, N, B, P)
     max_height = max([hl, max(corners(1,:))]);
     min_height = min([1, min(corners(1,:))]);
     height_stitch = max_height - (min_height - 1);
+    disp(height_stitch)
     
     % find width of stitched image
     max_width = max([wl, max(corners(2,:))]);
     min_width = min([1, min(corners(2,:))]);
     width_stitch = max_width - (min_width - 1);
+    disp(width_stitch)
     
     % create a (black) framework for the stiched image
     stitched_image = zeros(height_stitch, width_stitch);
