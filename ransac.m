@@ -8,17 +8,16 @@ function [transformation] = ransac(input_image1, input_image2, N, pairs, T, disp
 % output:
 % transformation parameters
 
-
 [points matches keypoints1 keypoints2] = keypoint_matching(input_image1, input_image2, T, display_image);
 
 count = 0 ;
 for n =1:N
     
-    count_inliers = 0 ;
+    count_inliers = 0;
     
     % choose P pairs fromt the matches.
-    A = []
-    b = []
+    A = [];
+    b = [];
     for p = 1:pairs
         
         % get the x and y values of the matched points. 
@@ -31,11 +30,11 @@ for n =1:N
         %construct A and b
         row1 = [x1 y1 0 0 1 0 ];
         row2 = [0 0 x1 y1 0 1];
-        A = [A; row1 ; row2]
+        A = [A; row1 ; row2];
         b = [b; x2 ;y2];   
     end
         
-    trans = pinv(A) * b
+    trans = pinv(A) * b;
     x_trans_list = [];
     y_trans_list = [];
     
@@ -100,9 +99,8 @@ image = imread(input_image1);
 % transform image with our own function
   
 %M = reshape(transformation(1:4),2, 2); 
-M = [transformation(1:2) , transformation(3:4)]
+M = [transformation(1:2) , transformation(3:4)];
 t = [transformation(5:6)];
-t
 
 
 [n, m] = size(image);
@@ -116,18 +114,13 @@ t
         ynew = coordinates(2,1);
         if xnew > 1 && xnew < n &&  ynew >1 && ynew < m
             trans_image(xnew, ynew )= image(x, y);   
-            
         end
     end
  end
  
 if display_image ~= 'yes' 
     imshow(mat2gray(trans_image))
-    
 end
-
-
-
 
 % with imtransform and transformation
 tform = zeros(3,3);
