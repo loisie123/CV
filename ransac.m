@@ -112,12 +112,12 @@ function [transformation] = ransac(input_image1, input_image2, N, pairs, B, disp
     corners(:,4) = round(M * [n;m] + t)';
     
     % find height of stitched image
-    max_height = max([hl, max(corners(1,:))]);
+    max_height = max([n, max(corners(1,:))]);
     min_height = min([1, min(corners(1,:))]);
     height_trans = max_height - (min_height - 1);
     
     % find width of stitched image
-    max_width = max([wl, max(corners(2,:))]);
+    max_width = max([m, max(corners(2,:))]);
     min_width = min([1, min(corners(2,:))]);
     width_trans = max_width - (min_width - 1);
    
