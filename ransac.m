@@ -103,12 +103,31 @@ function [transformation] = ransac(input_image1, input_image2, N, pairs, B, disp
     M = [transformation(1:2) , transformation(3:4)];
     t = [transformation(5:6)];
     [n, m] = size(image);
-    trans_image = zeros(n, m);
+    
+    % find corners of the stiched-images
+    corners = zeros(2, 4);
+    corners(:,1) = round(M * [1;1] + t)';
+    corners(:,2) = round(M * [1;m] + t)';
+    corners(:,3) = round(M * [n;1] + t)';
+    corners(:,4) = round(M * [n;m] + t)';
+    
+    % find height of stitched image
+    max_height = max([n, max(corners(1,:))]);
+    min_height = min([1, min(corners(1,:))]);
+    height_trans = max_height - (min_height - 1);
+    
+    % find width of stitched image
+    max_width = max([m, max(corners(2,:))]);
+    min_width = min([1, min(corners(2,:))]);
+    width_trans = max_width - (min_width - 1);
+   
+    trans_image = zeros(height_trans, width_trans);
     for x=1:n
         for y=1:m 
             coordinates = round(M * [x;y] + t );
-            xnew = coordinates(1,1);
-            ynew = coordinates(2,1);
+            xnew = coordinates(1,1) - (min_height - 1);
+            ynew = coordinates(2,1)- (min_width - 1);
+            trans_image(xnew, ynew )= image(x, y);
             if xnew > 1 && xnew < n &&  ynew >1 && ynew < m
                 trans_image(xnew, ynew )= image(x, y);   
             end
