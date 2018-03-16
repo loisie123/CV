@@ -1,14 +1,14 @@
-function [stitched_image] = stitch(left, right, N, T, P)
+function [stitched_image] = stitch(left, right, N, B, P)
 % %function that creates a stitched image
 % left, right: the images that are compared
-% N : The amount of times the ransac is done
-% T : The amount of matches
-% P : pick P amount of matches from T 
+% N : number of iterations for doing RANSAC
+% B : size of batch for keypoint_matching
+% P : size of matching pairs for doing RANSAC
 % output:
 % stiched_image
 
     % find affine transformation
-    [transformation] = ransac(right, left, N, T, P, 'nop');
+    [transformation] = ransac(right, left, N, B, P, 'nop');
     
     % find transformation operators
     M = [transformation(1:2)'; transformation(3:4)']; 
