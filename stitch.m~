@@ -12,8 +12,8 @@ function [] = stitch(left, right)
     right = imread(right);
     left = imread(left);
     
-    [hr, wr] = size(right);
-    [hl, wl] = size(left);
+    [hr, wr, ~] = size(right);
+    [hl, wl, ~] = size(left);
     
     corners = zeros(2, 4);
     
@@ -30,35 +30,28 @@ function [] = stitch(left, right)
     min_width = min([1, min(corners(2,:))]);
     width_stitch = max_width - (min_width - 1);
     
-    stitched_image = zeros(height_stitch, width_stitch);
-    
-    height_transform = 0;
-    if min_height < 1
-        height_transform = round(min_height - 1);
-    end
-    
-    width_transform = 0;
-    if min_width < 1
-        width_transform = round(min_width - 1);
-    end
+    stitched_image = zeros(height_stitch, width_stitch, 3);
     
     for x=1:hl
         for y=1:wl
-            coordinates = [x + height_transform, y + width_transform];
-            stitched_image(coordinates) = left(x,y);
+            stitched_image(x,y, :) = left(x,y, :);
         end
     end
     
     for x=1:hr
         for y=1:wr
-            coordinates = round(M * [x; y] + t)';
-            if stitched_image(coordinates) == 0
-                stitched_image(coordinates) = right(x,y);
+            coordinates = round(M * [x; y] + t);
+            x_prime = coordinates(1,1);
+            y_prime = coordinates(2,1);
+            disp(x_prime)
+            if stitched_image(x_prime, y_prime, 1) == 0 && stitched_image(x_prime, y_prime, 2) == 0 && stitched_image(x_prime, y_prime, 3) == 0
+                stitched_image(x_prime, y_prime, :) = right(x,y, :);
             end
         end
     end
     
-    imshow(stitched_image);
+    figure;
+    imshow(stitched_image, []);
     
 end
 

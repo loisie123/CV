@@ -41,7 +41,6 @@ function [transformation] = RANSAC_MIRTHE( image1, image2 )
     % find transformation operators
     M = [transformation(1:2)'; transformation(3:4)']; 
     t = transformation(5:6);
-    
     [n, m] = size(image1);
     
     % transform the image

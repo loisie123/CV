@@ -43,13 +43,16 @@ function [] = stitch(left, right)
             coordinates = round(M * [x; y] + t);
             x_prime = coordinates(1,1);
             y_prime = coordinates(2,1);
+            %disp(x_prime)
+            %disp(y_prime)
             if stitched_image(x_prime, y_prime, 1) == 0 && stitched_image(x_prime, y_prime, 2) == 0 && stitched_image(x_prime, y_prime, 3) == 0
-                stitched_image(x_prime, y_prime, :) = right(x,y, :);
+                %stitched_image(x_prime, y_prime, :) = right(x,y, :);
             end
         end
     end
     
-    imshow(stitched_image);
+    figure;
+    imshow(stitched_image, []);
     
 end
 
