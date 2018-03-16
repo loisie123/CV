@@ -5,7 +5,7 @@ function [transformation] = ransac(input_image1, input_image2, N, pairs, T, disp
 % T : The amount of matches
 % P : pick P amount of matches from T 
 % display-image: whether or not some images must be displayed
-%output:
+% output:
 % transformation parameters
 
 

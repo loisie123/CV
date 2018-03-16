@@ -2,7 +2,8 @@ function [] = stitch(left, right)
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-    [transformation] = RANSAC_MIRTHE( right, left );
+    % ransac(right, left, 1000, 4, 50, 'nop')
+    [transformation] = ransac(right, left, 100000, 4, 50, 'nop');
     
     % find transformation operators
     M = [transformation(1:2)'; transformation(3:4)']; 
@@ -45,8 +46,6 @@ function [] = stitch(left, right)
             coordinates = round(M * [x; y] + t);
             x_prime = coordinates(1,1) - (min_height - 1);
             y_prime = coordinates(2,1) - (min_width - 1);
-            %disp(x_prime)
-            %disp(y_prime)
             if stitched_image(x_prime, y_prime) == 0
                 stitched_image(x_prime, y_prime) = right(x,y);
             end
