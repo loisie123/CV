@@ -11,7 +11,7 @@ function [transformation] = RANSAC_MIRTHE( image1, image2 )
     
 
     P = 4;
-    N = 5;
+    N = 1;
     height_A = 2 * size(matches, 2);
 
     % define A and b
@@ -23,7 +23,7 @@ function [transformation] = RANSAC_MIRTHE( image1, image2 )
     b = reshape(keypoints2(1:2, matches(2, :)), height_A, 1);
 
     score = 0;
-    transformation = zeros(6,1);
+    transformation = zeros(6);
 
     for n=1:N
         permutation = randperm(size(matches,2));
@@ -42,17 +42,14 @@ function [transformation] = RANSAC_MIRTHE( image1, image2 )
     M = [transformation(1:2)'; transformation(3:4)']; 
     t = transformation(5:6);
     
-    [n, m] = size(image1);
-    
     % transform the image
-    trans_image = zeros(n, m);
-    for x=1:n
-        for y=1:m
+    trans_image = zeros(size(image1));
+    for x=1:size(image1, 1)
+        for y=1:size(image1, 2)
             coordinates = round(M * [x;y] + t);
             if coordinates(1,1) > 1 && coordinates(2,1) > 1
-                if coordinates(1,1) <= n && coordinates(2,1) <= m
-                    trans_image(coordinates) = image1(x, y);
-                end
+                if 
+                trans_image(coordinates) = image1(x, y);
             end
         end
     end
