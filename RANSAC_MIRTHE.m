@@ -11,16 +11,18 @@ function [transformation] = RANSAC_MIRTHE( image1, image2 )
     
 
     P = 4;
-    N = 5;
+    N = 500;
     height_A = 2 * size(matches, 2);
 
     % define A and b
     A = zeros(height_A, 6);
-    A(1:2:height_A, 1:2) = keypoints1(1:2, matches(1, :))';
-    A(2:2:height_A, 3:4) = keypoints1(1:2, matches(1, :))';
+    A(1:2:height_A, 1) = keypoints1(2, matches(1, :))';
+    A(1:2:height_A, 2) = keypoints1(1, matches(1, :))';
+    A(2:2:height_A, 3) = keypoints1(2, matches(1, :))';
+    A(2:2:height_A, 4) = keypoints1(1, matches(1, :))';
     A(1:2:height_A, 5) = A(1, 5, :) + 1;
     A(2:2:height_A, 6) = A(2, 6, :) + 1;
-    b = reshape(keypoints2(1:2, matches(2, :)), height_A, 1);
+    b = fliplr(reshape(keypoints2(1:2, matches(2, :)), height_A, 1));
 
     score = 0;
     transformation = zeros(6,1);
