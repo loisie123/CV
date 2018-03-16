@@ -37,7 +37,7 @@ function [stitched_image] = stitch(left, right, N, B, P)
     % find width of stitched image
     max_width = max([wl, max(corners(2,:))]);
     min_width = min([1, min(corners(2,:))]);
-    width_stitch = max_width - (min_width - 1);
+    width_stitch = max_width -( min_width -1);
     disp(width_stitch)
     
     % create a (black) framework for the stiched image
@@ -46,20 +46,24 @@ function [stitched_image] = stitch(left, right, N, B, P)
     % put all pixels of the left image at the stiched image
     for x=1:hl
         for y=1:wl
-            x_prime = x - (min_height - 1);
-            y_prime = y - (min_width - 1);
+            x_prime = x;
+            y_prime = y ;
             stitched_image(x_prime, y_prime, :) = left(x,y);
         end
     end
+    figure;
+    imshow(stitched_image, [])
+    [x1 y1] = size(left)
+    
     
     % put all pixels of the transformed right image on the stitched image
     for x=1:hr
         for y=1:wr
             coordinates = round(M * [x; y] + t);
-            x_prime = coordinates(1,1) - (min_height - 1);
-            y_prime = coordinates(2,1) - (min_width - 1);
+            x_prime = coordinates(1,1)- (min_height - 1) ;
+            y_prime = coordinates(2,1)- (min_width - 1) ;
             if stitched_image(x_prime, y_prime) == 0
-                stitched_image(x_prime, y_prime) = right(x,y);
+             stitched_image(x_prime, y_prime) = right(x,y);
             end
         end
     end

@@ -17,14 +17,12 @@ function [vector matches f1 f2] = keypoint_matching(input_1, input_2, B, draw_im
     Ia = imread(input_2) ;
     
     % make images same size
-    % Get size of existing image A. 
-     [rowsA colsA numberOfColorChannelsA] = size(Ia); 
-    % Get size of existing image B. 
-    [rowsB colsB numberOfColorChannelsB] = size(Ib); 
-    % See if lateral sizes match. 
-    if rowsB ~= rowsA || colsA ~= colsB 
-    % Size of B does not match A, so resize B to match A's size. 
-    Ib = imresize(Ib, [rowsA colsA]); 
+    if size(Ia) ~= size(Ib)
+        [rowsA colsA numberOfColorChannelsA] = size(Ia); 
+        [rowsB colsB numberOfColorChannelsB] = size(Ib);  
+        if rowsB ~= rowsA || colsA ~= colsB  
+            Ib = imresize(Ib, [rowsA colsA]); 
+        end
     end
     
     
